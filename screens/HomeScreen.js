@@ -5,7 +5,6 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import tw from "twrnc";
@@ -22,7 +21,6 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Avatar } from "react-native-elements";
 import Header from "../components/Header";
-import AvailableJob from "../components/AvailableJob";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -30,21 +28,84 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={tw`flex bg-[#BEDA54] h-full`}>
       <Header />
-      <ScrollView style={tw`p-1`}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("JobScreen");
+      <View style={tw`flex mt-5`}>
+        <TouchableOpacity>
+          <Text
+            onPress={() => {
+              navigation.navigate("JobsListScreen");
+            }}
+            style={tw`ml-6 text-white text-xl`}
+          >
+            Available Jobs
+          </Text>
+        </TouchableOpacity>
+        <View
+          style={{
+            borderColor: "white",
+            borderStyle: "dotted",
+            borderWidth: 1,
+            borderRadius: 1,
+            marginBottom: 15,
           }}
-        >
-          <AvailableJob />
-        </TouchableOpacity>
+        />
         <TouchableOpacity>
-          <AvailableJob />
+          <Text
+            onPress={() => {
+              navigation.navigate("DeliveryHistoryListScreen");
+            }}
+            style={tw`ml-6 text-white text-xl`}
+          >
+            Delivery History
+          </Text>
         </TouchableOpacity>
+        <View
+          style={{
+            borderColor: "white",
+            borderStyle: "dotted",
+            borderWidth: 1,
+            borderRadius: 1,
+            marginBottom: 15,
+          }}
+        />
         <TouchableOpacity>
-          <AvailableJob />
+          <Text
+            onPress={() => {
+              navigation.navigate("RiderProfileScreen");
+            }}
+            style={tw`ml-6 text-white text-xl`}
+          >
+            Rider Profile
+          </Text>
         </TouchableOpacity>
-      </ScrollView>
+        <View
+          style={{
+            borderColor: "white",
+            borderStyle: "dotted",
+            borderWidth: 1,
+            borderRadius: 1,
+            marginBottom: 15,
+          }}
+        />
+        <TouchableOpacity>
+          <Text
+            onPress={() => {
+              navigation.navigate("WalletBalanceScreen");
+            }}
+            style={tw`ml-6 text-white text-xl`}
+          >
+            Wallet Balance
+          </Text>
+        </TouchableOpacity>
+        <View
+          style={{
+            borderColor: "white",
+            borderStyle: "dotted",
+            borderWidth: 1,
+            borderRadius: 1,
+            marginBottom: 15,
+          }}
+        />
+      </View>
     </SafeAreaView>
   );
 };

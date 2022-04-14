@@ -12,6 +12,10 @@ import RegisterScreen from "./screens/RegisterScreen";
 import HomeScreen from "./screens/HomeScreen";
 import JobScreen from "./screens/JobScreen";
 import DeliveryHistoryListScreen from "./screens/DeliveryHistoryListScreen";
+import JobsListScreen from "./screens/JobsListScreen";
+import WalletBalanceScreen from "./screens/WalletBalanceScreen";
+import DeliveryHistoryScreen from "./screens/RiderProfileScreen";
+import RiderProfileScreen from "./screens/RiderProfileScreen";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -33,7 +37,7 @@ export default function App() {
               swipeEnabled={true}
               textStyle={{ fontSize: 17 }}
             >
-              <Stack.Navigator initialRouteName="DeliveryHistoryListScreen">
+              <Stack.Navigator initialRouteName="LoginScreen">
                 <Stack.Screen
                   name="LoginScreen"
                   component={LoginScreen}
@@ -65,6 +69,27 @@ export default function App() {
                 <Stack.Screen
                   name="DeliveryHistoryListScreen"
                   component={DeliveryHistoryListScreen}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="RiderProfileScreen"
+                  component={RiderProfileScreen}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="JobsListScreen"
+                  component={JobsListScreen}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="WalletBalanceScreen"
+                  component={WalletBalanceScreen}
                   options={{
                     headerShown: false,
                   }}

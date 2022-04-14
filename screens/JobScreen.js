@@ -105,7 +105,7 @@ const JobScreen = () => {
       </View>
       <TouchableOpacity onPress={changeStatus}>
         <Text
-          style={tw`bg-green-400 p-3 border rounded-xl w-[70%] mx-auto overflow-hidden text-center mt-80`}
+          style={tw`bg-green-400 p-3 border rounded-xl w-[70%] mx-auto overflow-hidden text-center mt-70`}
         >
           {status}
         </Text>

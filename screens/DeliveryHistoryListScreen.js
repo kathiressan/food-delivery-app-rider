@@ -25,6 +25,8 @@ import Header from "../components/Header";
 import AvailableJob from "../components/JobHistory";
 
 const DeliveryHistoryListScreen = () => {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={tw`flex bg-[#BEDA54] h-full`}>
       <Header />
@@ -32,9 +34,6 @@ const DeliveryHistoryListScreen = () => {
         Delivery history
       </Text>
       <ScrollView style={tw`p-1`}>
-        {/* onPress={() => {
-            navigation.navigate("JobScreen");
-          }} */}
         <TouchableOpacity>
           <AvailableJob />
         </TouchableOpacity>
