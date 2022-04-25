@@ -27,7 +27,11 @@ import { Avatar } from "react-native-elements";
 import Header from "../components/Header";
 import Icon from "react-native-vector-icons/Entypo";
 
-const JobScreen = () => {
+const JobScreen = ({
+  route: {
+    params: { item },
+  },
+}) => {
   const jobStatus = ["Grocery Picked Up", "Arrived", "Delivered"];
   const [status, setStatus] = useState(jobStatus[0]);
   const navigation = useNavigation();
@@ -83,15 +87,17 @@ const JobScreen = () => {
       >
         <View style={tw`items-center flex flex-row`}>
           <Icon name="location-pin" size={30} color="red" />
-          <Text style={tw`text-white`}>Pickup location</Text>
+          <Text style={tw`text-white`}>{item.pickupAddress}</Text>
         </View>
         <View style={tw`items-center flex flex-row`}>
           <Icon name="location-pin" size={30} color="green" />
-          <Text style={tw`text-white`}>Drop off location</Text>
+          <Text style={tw`text-white`}>{item.deliveryAddress}</Text>
         </View>
         <View style={tw`flex flex-row justify-between`}>
-          <Text style={tw`ml-3 text-white`}>Order ID: 00001</Text>
-          <Text style={tw`ml-3 text-white`}>Fees: rm8</Text>
+          <Text style={tw`ml-3 text-white`}>{`Order ID: ${item.id}`}</Text>
+          <Text
+            style={tw`ml-3 text-white`}
+          >{`Fees: RM${item.deliveryFee}`}</Text>
         </View>
       </View>
       <View

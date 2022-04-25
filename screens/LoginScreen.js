@@ -10,28 +10,42 @@ import React, { useState } from "react";
 import tw from "twrnc";
 import { useToast } from "react-native-toast-notifications";
 import { db } from "../firebase";
-import { getDatabase, ref, onValue, set } from "firebase/database";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore/lite";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { setAccount } from "../slices/accountSlice";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const toast = useToast();
   const navigation = useNavigation();
+  const accountsRef = collection(db, "accounts");
 
-  const loginFunc = () => {
-    toast.show("Login Successful!", {
-      type: "success",
+  const loginFunc = async () => {
+    const q = query(accountsRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    let validAcc = false;
+    querySnapshot.forEach((doc) => {
+      if (doc.data().email == email && doc.data().password == password) {
+        validAcc = true;
+        const acc = doc.data();
+        acc.id = doc.id;
+        dispatch(setAccount(acc));
+      }
     });
-    navigation.navigate("HomeScreen");
+    if (validAcc) {
+      toast.show("Login Successful!", {
+        type: "success",
+      });
+      navigation.navigate("HomeScreen");
+    } else {
+      toast.show("Invalid email or password!", {
+        type: "danger",
+      });
+    }
   };
 
   return (

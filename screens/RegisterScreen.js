@@ -10,14 +10,7 @@ import React, { useState } from "react";
 import tw from "twrnc";
 import { useToast } from "react-native-toast-notifications";
 import { db } from "../firebase";
-import { getDatabase, ref, onValue, set } from "firebase/database";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore/lite";
+import { collection, addDoc, doc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 
 const RegisterScreen = () => {
@@ -26,19 +19,34 @@ const RegisterScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   //   const [confirmPassword, setConfirmPassword] = useState("");
-  const [vehicleModel, setVehicleModel] = useState("");
+  const [vehiclePlateNumber, setVehiclePlateNumber] = useState("");
   const [preferredBank, setPreferredBank] = useState("");
   const [bankAccNum, setBankAccNum] = useState("");
 
   const toast = useToast();
   // const accountsCol = collection(db, "accounts");
   const navigation = useNavigation();
+  const accountsRef = collection(db, "accounts");
 
-  const registerFunc = () => {
-    toast.show("Registration Successful!", {
-      type: "success",
-    });
-    navigation.navigate("LoginScreen");
+  const registerFunc = async () => {
+    try {
+      await addDoc(accountsRef, {
+        name: name,
+        phoneNumber: phoneNumber,
+        email: email,
+        password: password,
+        plateNumber: vehiclePlateNumber,
+        bankName: preferredBank,
+        bankNumber: bankAccNum,
+        accountType: "Rider",
+      });
+      toast.show("Registration Successful!", {
+        type: "success",
+      });
+      navigation.navigate("LoginScreen");
+    } catch (err) {
+      alert(err);
+    }
   };
 
   return (
@@ -83,10 +91,10 @@ const RegisterScreen = () => {
       />
       <TextInput
         style={tw`bg-white w-[65%] p-2 border rounded-xl mt-2`}
-        onChangeText={setVehicleModel}
+        onChangeText={setVehiclePlateNumber}
         placeholder="Vehicle plate number"
         secureTextEntry={true}
-        value={vehicleModel}
+        value={vehiclePlateNumber}
       />
       <TextInput
         style={tw`bg-white w-[65%] p-2 border rounded-xl mt-2`}
