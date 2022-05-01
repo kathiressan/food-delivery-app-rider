@@ -25,7 +25,11 @@ const LoginScreen = () => {
   const accountsRef = collection(db, "accounts");
 
   const loginFunc = async () => {
-    const q = query(accountsRef, where("email", "==", email));
+    const q = query(
+      accountsRef,
+      where("email", "==", email),
+      where("accountType", "==", "Rider")
+    );
     const querySnapshot = await getDocs(q);
     let validAcc = false;
     querySnapshot.forEach((doc) => {

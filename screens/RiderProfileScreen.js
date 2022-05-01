@@ -23,6 +23,8 @@ import { useNavigation } from "@react-navigation/native";
 import { Avatar } from "react-native-elements";
 import Header from "../components/Header";
 import RiderDetail from "../components/RiderDetail";
+import { useSelector } from "react-redux";
+import { selectAccount } from "../slices/accountSlice";
 
 const RiderProfileScreen = () => {
   const [name, setName] = useState("Mohamed Haris");
@@ -31,6 +33,7 @@ const RiderProfileScreen = () => {
   const [vehicleModel, setVehicleModel] = useState("Yamaha LC");
   const [preferredBank, setPreferredBank] = useState("Bank Islam");
   const [bankAccNum, setBankAccNum] = useState("08090911023");
+  const account = useSelector(selectAccount);
   return (
     <SafeAreaView style={tw`flex bg-[#BEDA54] h-full`}>
       <Header />
@@ -41,7 +44,7 @@ const RiderProfileScreen = () => {
         ]}
       >
         <Text>Wallet</Text>
-        <Text>RM: 40.50</Text>
+        <Text>{`RM: ${account.totalWallet}`}</Text>
       </View>
       <View
         style={[

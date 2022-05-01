@@ -39,6 +39,8 @@ const RegisterScreen = () => {
         bankName: preferredBank,
         bankNumber: bankAccNum,
         accountType: "Rider",
+        totalCollected: 0.0,
+        totalWallet: 0.0,
       });
       toast.show("Registration Successful!", {
         type: "success",

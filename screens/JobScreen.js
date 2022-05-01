@@ -14,18 +14,13 @@ import React, { useState } from "react";
 import tw from "twrnc";
 import { useToast } from "react-native-toast-notifications";
 import { db } from "../firebase";
-import { getDatabase, ref, onValue, set } from "firebase/database";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore/lite";
+import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { Avatar } from "react-native-elements";
 import Header from "../components/Header";
 import Icon from "react-native-vector-icons/Entypo";
+import { useSelector, useDispatch } from "react-redux";
+import { selectAccount, setAccount } from "../slices/accountSlice";
 
 const JobScreen = ({
   route: {
@@ -33,15 +28,47 @@ const JobScreen = ({
   },
 }) => {
   const jobStatus = ["Grocery Picked Up", "Arrived", "Delivered"];
-  const [status, setStatus] = useState(jobStatus[0]);
+  const [status, setStatus] = useState(
+    jobStatus[item.orderStatus ? jobStatus.indexOf(item.orderStatus) + 1 : 0]
+  );
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
+  const toast = useToast();
+  const account = useSelector(selectAccount);
+  const tempAccount = JSON.parse(JSON.stringify(account));
+  tempAccount.totalWallet = parseFloat(tempAccount.totalWallet);
+  const dispatch = useDispatch();
 
-  const changeStatus = () => {
+  const changeStatus = async () => {
     let idx = jobStatus.indexOf(status) + 1;
     idx = idx > 2 ? 0 : idx;
     setStatus(jobStatus[idx]);
+    await updateDoc(doc(db, "orders", item.id), {
+      orderStatus: status,
+      riderID: account.id,
+    });
+    if (status == "Grocery Picked Up") {
+      toast.show("Order has been picked up!", {
+        type: "success",
+      });
+    }
+    if (status == "Arrived") {
+      toast.show("You have arrived at delivery location", {
+        type: "success",
+      });
+    }
     if (status == "Delivered") {
+      const riderID = item.riderID;
+      const walletBalance =
+        parseFloat(tempAccount.totalWallet) + parseFloat(item.deliveryFee);
+      tempAccount.totalWallet = walletBalance;
+      dispatch(setAccount(tempAccount));
+      await updateDoc(doc(db, "accounts", account.id), {
+        totalWallet: walletBalance,
+      });
+      toast.show("Order has been delivered!", {
+        type: "success",
+      });
       setModalVisible(true);
     }
   };
@@ -65,10 +92,10 @@ const JobScreen = ({
         <View style={styles.centeredView}>
           <View style={[styles.modalView, tw`bg-[#BEDA54] border`]}>
             <Text style={[styles.modalText, tw`text-black`]}>
-              You have successfully delivered the grocery order 000001
+              {`You have successfully delivered the grocery order ${item.id}`}
             </Text>
             <Text style={tw`text-white`}>
-              RM 8 has been credited into your wallet
+              {`RM ${item.deliveryFee} has been credited into your wallet`}
             </Text>
             <TouchableOpacity
               style={tw`mt-10 bg-black p-3 rounded-md`}
@@ -103,11 +130,16 @@ const JobScreen = ({
       <View
         style={tw`bg-orange-300 mb-3 p-2 rounded-xl overflow-hidden border`}
       >
-        <Text style={tw`text-white`}>Grocery List:</Text>
+        {item.items.map((prod, index) => (
+          <Text key={index} style={tw`text-white`}>{`${index + 1}. ${
+            prod.productName
+          }`}</Text>
+        ))}
+        {/* <Text style={tw`text-white`}>Grocery List:</Text>
         <Text style={tw`text-white`}>1. Egg</Text>
         <Text style={tw`text-white`}>2. Chicken</Text>
         <Text style={tw`text-white`}>3. Carrot</Text>
-        <Text style={tw`text-white`}>4. Brocolli</Text>
+        <Text style={tw`text-white`}>4. Brocolli</Text> */}
       </View>
       <TouchableOpacity onPress={changeStatus}>
         <Text
