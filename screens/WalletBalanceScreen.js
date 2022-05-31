@@ -82,6 +82,7 @@ const WalletBalanceScreen = () => {
               style={tw`bg-white w-[65%] p-2 border rounded-xl mt-2`}
               onChangeText={setAmount}
               placeholder="Enter amount"
+              placeholderTextColor="black"
               value={amount}
             />
             <TouchableOpacity
