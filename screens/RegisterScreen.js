@@ -106,7 +106,6 @@ const RegisterScreen = () => {
         onChangeText={setVehiclePlateNumber}
         placeholder="Vehicle plate number"
         placeholderTextColor="black"
-        secureTextEntry={true}
         value={vehiclePlateNumber}
       />
       <TextInput
@@ -114,7 +113,6 @@ const RegisterScreen = () => {
         onChangeText={setPreferredBank}
         placeholder="Preferred Bank"
         placeholderTextColor="black"
-        secureTextEntry={true}
         value={preferredBank}
       />
       <TextInput
@@ -122,7 +120,6 @@ const RegisterScreen = () => {
         onChangeText={setBankAccNum}
         placeholder="Bank account number"
         placeholderTextColor="black"
-        secureTextEntry={true}
         value={bankAccNum}
       />
       <TouchableOpacity style={tw`w-[20%]`}>
