@@ -9,6 +9,7 @@ import {
   Modal,
   StyleSheet,
   Pressable,
+  Linking
 } from "react-native";
 import React, { useState } from "react";
 import tw from "twrnc";
@@ -72,6 +73,21 @@ const JobScreen = ({
       setModalVisible(true);
     }
   };
+
+  const OpenURLButton = async () => {
+    const url = `https://waze.com/ul?ll=${item.deliveryLatitude},${item.deliveryLongitude}&navigate=yes`;
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(url);
+    } else {
+      alert(`Don't know how to open this URL: ${url}`);
+    }
+
+  };
+
   return (
     <SafeAreaView
       style={[
@@ -116,10 +132,14 @@ const JobScreen = ({
           <Icon name="location-pin" size={30} color="red" />
           <Text style={tw`text-white`}>{item.pickupAddress}</Text>
         </View>
-        <View style={tw`items-center flex flex-row`}>
-          <Icon name="location-pin" size={30} color="green" />
-          <Text style={tw`text-white`}>{item.deliveryAddress}</Text>
-        </View>
+        <TouchableOpacity
+          onPress={() => {OpenURLButton()}}
+        >
+          <View style={tw`items-center flex flex-row`}>
+            <Icon name="location-pin" size={30} color="green" />
+            <Text style={tw`text-white`}>{item.deliveryAddress}</Text>
+          </View>
+        </TouchableOpacity>
         <View style={tw`flex flex-row justify-between`}>
           <Text style={tw`ml-3 text-white`}>{`Order ID: ${item.id}`}</Text>
           <Text

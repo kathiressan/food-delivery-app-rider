@@ -14,14 +14,14 @@ import { collection, addDoc, doc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 
 const RegisterScreen = () => {
-  const [name, setName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
   //   const [confirmPassword, setConfirmPassword] = useState("");
-  const [vehiclePlateNumber, setVehiclePlateNumber] = useState("");
-  const [preferredBank, setPreferredBank] = useState("");
-  const [bankAccNum, setBankAccNum] = useState("");
+  const [vehiclePlateNumber, setVehiclePlateNumber] = useState(null);
+  const [preferredBank, setPreferredBank] = useState(null);
+  const [bankAccNum, setBankAccNum] = useState(null);
 
   const toast = useToast();
   // const accountsCol = collection(db, "accounts");
@@ -30,22 +30,28 @@ const RegisterScreen = () => {
 
   const registerFunc = async () => {
     try {
-      await addDoc(accountsRef, {
-        name: name,
-        phoneNumber: phoneNumber,
-        email: email,
-        password: password,
-        plateNumber: vehiclePlateNumber,
-        bankName: preferredBank,
-        bankNumber: bankAccNum,
-        accountType: "Rider",
-        totalCollected: 0.0,
-        totalWallet: 0.0,
-      });
-      toast.show("Registration Successful!", {
-        type: "success",
-      });
-      navigation.navigate("LoginScreen");
+      if (!name || !phoneNumber || !email || !password || !vehiclePlateNumber || !preferredBank || !bankAccNum) {
+        toast.show("Please fill up all fields", {
+          type: "danger",
+        });
+      } else {
+        await addDoc(accountsRef, {
+          name: name,
+          phoneNumber: phoneNumber,
+          email: email,
+          password: password,
+          plateNumber: vehiclePlateNumber,
+          bankName: preferredBank,
+          bankNumber: bankAccNum,
+          accountType: "Rider",
+          totalCollected: 0.0,
+          totalWallet: 0.0,
+        });
+        toast.show("Registration Successful!", {
+          type: "success",
+        });
+        navigation.navigate("LoginScreen");
+      }
     } catch (err) {
       alert(err);
     }
